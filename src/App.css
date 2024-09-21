@@ -1,42 +1,108 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  display: flex;
+  padding: 24pt;
+  justify-content: center;
   text-align: center;
+  background-color: #faf8ef;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.title {
+  font-size: 60pt;
+  font-weight: extrabold;
+  align-items: center;
+  !text-align: left;
+  color: #776e65;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.sub-title {
+  font-size: 14pt;
+  font-weight: semibold;
+  margin-bottom: 6pt;
+  !text-align: left;
+  color: #776e65;
 }
 
-.card {
-  padding: 2em;
+.board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12pt;
+  padding: 12pt;
+  background-color: #bbada0;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.read-the-docs {
-  color: #888;
+.row {
+  display: contents;
+}
+
+.cell {
+  width: 100pt;
+  height: 100pt;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 24pt;
+  border-radius: 0.5rem;
+}
+
+.cell-2 {
+  font-size: 45pt;
+  background-color: #eee4da;
+  color: #776e65;
+}
+
+.cell-4 {
+  font-size: 45pt;
+  background-color: #ede0c8;
+  color: #776e65;
+}
+
+.cell-8 {
+  font-size: 45pt;
+  background-color: #f2b179;
+  color: white;
+}
+
+.cell-16 {
+  font-size: 45pt;
+  background-color: #f59563;
+  color: white;
+}
+
+.cell-32 {
+  font-size: 45pt;
+  background-color: #f67c5f;
+  color: white;
+}
+
+.cell-64 {
+  font-size: 45pt;
+  background-color: #f65e3b;
+  color: white;
+}
+
+.cell-128 {
+  font-size: 45pt;
+  background-color: #edcf72;
+  color: white;
+}
+
+.cell-default {
+  background-color: #cdc1b4;
+  color: #776e65;
+}
+
+.game-over {
+  color: #776e65;
+  font-weight: bold;
+  font-size: 32pt;
+  margin-top: 8pt;
 }
