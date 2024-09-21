@@ -6,50 +6,50 @@ import React, { useCallback, useEffect, useState } from 'react';
 type Cell = number | null;
 type Grid = Cell[][];
 type Direction = 'up' | 'down' | 'left' | 'right';
+type Position = { rowIndex: number; cellIndex: number };
+
+const getEmptyCells = (grid: Grid): Position[] => {
+  return grid
+    .flatMap((row, rowIndex) =>
+      row.map((cell, cellIndex): Position | null =>
+        cell === null ? ({ rowIndex, cellIndex } as Position) : null,
+      ),
+    )
+    .filter((pos): pos is Position => pos !== null);
+};
 
 const generateInitialGrid = (): Grid => {
-  const grid: Grid = Array.from({ length: 4 }, () => Array(4).fill(null));
+  const grid: Grid = Array.from({ length: 4 }, (): Cell[] =>
+    Array.from({ length: 4 }, () => null as Cell),
+  );
 
   for (let i = 0; i < 2; i++) {
-    const emptyCells = grid
-      .flatMap((row, rowIndex) =>
-        row.map((cell, cellIndex) =>
-          cell === null ? { rowIndex, cellIndex } : null,
-        ),
-      )
-      .filter(
-        (cell): cell is { rowIndex: number; cellIndex: number } =>
-          cell !== null,
-      );
+    const emptyCells: Position[] = getEmptyCells(grid);
 
     if (emptyCells.length > 0) {
-      const { rowIndex, cellIndex } =
-        emptyCells[Math.floor(Math.random() * emptyCells.length)];
-      grid[rowIndex][cellIndex] = 2;
+      const cell: Position = emptyCells[
+        Math.floor(Math.random() * emptyCells.length)
+      ] as Position;
+
+      (grid[cell.rowIndex] as Cell[])[cell.cellIndex] = 2;
     }
   }
+
   return grid;
 };
 
 const addRandomCell = (grid: Grid): Grid => {
-  const newGrid = grid.map((row) => [...row]);
-  const emptyCells = newGrid
-    .flatMap((row, rowIndex) =>
-      row.map((cell, cellIndex) =>
-        cell === null ? { rowIndex, cellIndex } : null,
-      ),
-    )
-    .filter(
-      (cell): cell is { rowIndex: number; cellIndex: number } => cell !== null,
-    );
+  const emptyCells: Position[] = getEmptyCells(grid);
 
   if (emptyCells.length > 0) {
-    const { rowIndex, cellIndex } =
-      emptyCells[Math.floor(Math.random() * emptyCells.length)];
-    newGrid[rowIndex][cellIndex] = Math.random() < 0.9 ? 2 : 4;
+    const cell: Position = emptyCells[
+      Math.floor(Math.random() * emptyCells.length)
+    ] as Position;
+    (grid[cell.rowIndex] as Cell[])[cell.cellIndex] =
+      Math.random() < 0.9 ? 2 : 4;
   }
 
-  return newGrid;
+  return grid;
 };
 
 interface BoardProps {
@@ -73,27 +73,39 @@ const Board: React.FC<BoardProps> = ({ grid }) => {
 };
 
 const getStyleByValue = (value: Cell): string => {
-  const styles: Record<number, string> = {
-    2: 'cell-2',
-    4: 'cell-4',
-    8: 'cell-8',
-    16: 'cell-16',
-    32: 'cell-32',
-    64: 'cell-64',
-    128: 'cell-128',
-  };
-  return value !== null ? styles[value] || 'cell-default' : 'cell-default';
+  switch (value) {
+    case 2:
+      return 'cell-2';
+    case 4:
+      return 'cell-4';
+    case 8:
+      return 'cell-8';
+    case 16:
+      return 'cell-16';
+    case 32:
+      return 'cell-32';
+    case 64:
+      return 'cell-64';
+    case 128:
+      return 'cell-128';
+    default:
+      return 'cell-default';
+  }
 };
 
 const Game: React.FC = () => {
   // localStorage에서 그리드를 불러오고 없으면 초기 그리드를 생성
   const [grid, setGrid] = useState<Grid>(() => {
     const savedGrid = localStorage.getItem('2048-grid');
-    return savedGrid ? JSON.parse(savedGrid) : generateInitialGrid();
+    return savedGrid !== null
+      ? (JSON.parse(savedGrid) as Grid)
+      : generateInitialGrid();
   });
   const [gameOver, setGameOver] = useState<boolean>(() => {
     const savedGameOver = localStorage.getItem('2048-game-over');
-    return savedGameOver ? JSON.parse(savedGameOver) : false;
+    return savedGameOver !== null
+      ? (JSON.parse(savedGameOver) as boolean)
+      : false;
   });
 
   const handleKeyPress = useCallback(
@@ -109,7 +121,7 @@ const Game: React.FC = () => {
 
       const direction = directionMap[event.key];
 
-      if (direction) {
+      if (direction !== undefined) {
         const { result, isMoved } = moveMapIn2048Rule(grid, direction);
         if (isMoved) {
           const newGrid = addRandomCell(result);
@@ -126,6 +138,13 @@ const Game: React.FC = () => {
     [grid, gameOver],
   );
 
+  const handleReplay = () => {
+    setGrid(generateInitialGrid()); // 새로운 게임을 위한 초기 그리드 생성
+    setGameOver(false); // 게임 오버 상태 초기화
+    localStorage.removeItem('2048-grid'); // localStorage에서 그리드 삭제
+    localStorage.setItem('2048-game-over', JSON.stringify(false)); // localStorage에서 게임 오버 상태 초기화
+  };
+
   useEffect(() => {
     window.addEventListener('keydown', handleKeyPress);
     return () => {
@@ -140,10 +159,17 @@ const Game: React.FC = () => {
 
   return (
     <div className="game-container">
-      <h1 className="title">128</h1>
+      <div className="title">128</div>
       <div className="sub-title">Join the tiles, get to 128!</div>
       <Board grid={grid} />
-      {gameOver && <h2 className="game-over">Game Over!</h2>}
+      {gameOver && (
+        <div>
+          <div className="game-over">Game Over!</div>
+          <div onClick={handleReplay} className="replay">
+            Wanna Replay?
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -176,7 +202,7 @@ const revertDegreeMap: Record<Direction, number> = {
 
 const rotateMapCounterClockwise = (map: Grid, degree: number): Grid => {
   const rowLength = map.length;
-  const columnLength = map[0]?.length || 0;
+  const columnLength: number = map[0]?.length as number;
 
   if (columnLength === 0 || rowLength === 0) {
     return map;
