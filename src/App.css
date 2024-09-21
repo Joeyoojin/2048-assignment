@@ -4,6 +4,8 @@
   justify-content: center;
   text-align: center;
   background-color: #faf8ef;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .game-container {
@@ -13,16 +15,16 @@
 }
 
 .title {
-  font-size: 60pt;
-  font-weight: extrabold;
+  font-size: 54pt;
+  font-weight: 800;
   align-items: center;
   !text-align: left;
   color: #776e65;
 }
 
 .sub-title {
-  font-size: 14pt;
-  font-weight: semibold;
+  font-size: 16pt;
+  font-weight: 500;
   margin-bottom: 6pt;
   !text-align: left;
   color: #776e65;
@@ -103,6 +105,12 @@
 .game-over {
   color: #776e65;
   font-weight: bold;
-  font-size: 32pt;
+  font-size: 28pt;
   margin-top: 8pt;
+}
+
+.replay {
+  color: red;
+  font-weight: bold;
+  font-size: 28pt;
 }
