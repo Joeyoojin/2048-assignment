@@ -1,11 +1,11 @@
 #root {
   display: flex;
-  padding: 24pt;
+  padding: 18pt;
   justify-content: center;
   text-align: center;
   background-color: #faf8ef;
-  width: 100%;
-  margin: 0 auto;
+  width: 100vw;
+  height: 100vh;
 }
 
 .game-container {
@@ -14,20 +14,52 @@
   align-items: center;
 }
 
-.title {
-  font-size: 54pt;
-  font-weight: 800;
+.header {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  !text-align: left;
+  width: 100%;
+  margin-bottom: 20pt;
+}
+
+.header-text {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.title {
+  font-size: 60pt;
+  font-weight: 900;
+  align-items: center;
   color: #776e65;
+  line-height: 1.2;
 }
 
 .sub-title {
-  font-size: 16pt;
+  font-size: 14pt;
   font-weight: 500;
-  margin-bottom: 6pt;
-  !text-align: left;
+  padding-left: 2pt;
   color: #776e65;
+}
+
+.sub-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.replay-button {
+  font-size: 14pt;
+  font-weight: 600;
+  padding: 6pt 16pt;
+  background-color: #8f7a66;
+  color: white;
+  cursor: pointer;
+  border: none;
+  border-radius: 0.2rem;
 }
 
 .board {
@@ -36,8 +68,7 @@
   gap: 12pt;
   padding: 12pt;
   background-color: #bbada0;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 0.4rem;
 }
 
 .row {
@@ -52,7 +83,7 @@
   justify-content: center;
   font-weight: bold;
   font-size: 24pt;
-  border-radius: 0.5rem;
+  border-radius: 0.4rem;
 }
 
 .cell-2 {
@@ -104,13 +135,17 @@
 
 .game-over {
   color: #776e65;
-  font-weight: bold;
-  font-size: 28pt;
-  margin-top: 8pt;
+  font-weight: 700;
+  font-size: 30pt;
+  margin-top: 6pt;
 }
 
 .replay {
   color: red;
   font-weight: bold;
   font-size: 28pt;
+}
+
+.underline {
+  text-decoration: underline;
 }

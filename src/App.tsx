@@ -62,7 +62,7 @@ const Board: React.FC<BoardProps> = ({ grid }) => {
       {grid.map((row, rowIndex) => (
         <div key={rowIndex} className="row">
           {row.map((cell, cellIndex) => (
-            <div key={cellIndex} className={`cell ${getStyleByValue(cell)}`}>
+            <div key={cellIndex} className={`cell ${getDesignByValue(cell)}`}>
               {cell !== 0 && cell !== null ? cell : ''}
             </div>
           ))}
@@ -72,7 +72,7 @@ const Board: React.FC<BoardProps> = ({ grid }) => {
   );
 };
 
-const getStyleByValue = (value: Cell): string => {
+const getDesignByValue = (value: Cell): string => {
   switch (value) {
     case 2:
       return 'cell-2';
@@ -94,15 +94,14 @@ const getStyleByValue = (value: Cell): string => {
 };
 
 const Game: React.FC = () => {
-  // localStorage에서 그리드를 불러오고 없으면 초기 그리드를 생성
   const [grid, setGrid] = useState<Grid>(() => {
-    const savedGrid = localStorage.getItem('2048-grid');
+    const savedGrid = localStorage.getItem('128-grid');
     return savedGrid !== null
       ? (JSON.parse(savedGrid) as Grid)
       : generateInitialGrid();
   });
   const [gameOver, setGameOver] = useState<boolean>(() => {
-    const savedGameOver = localStorage.getItem('2048-game-over');
+    const savedGameOver = localStorage.getItem('128-game-over');
     return savedGameOver !== null
       ? (JSON.parse(savedGameOver) as boolean)
       : false;
@@ -126,12 +125,12 @@ const Game: React.FC = () => {
         if (isMoved) {
           const newGrid = addRandomCell(result);
           setGrid(newGrid);
-          localStorage.setItem('2048-grid', JSON.stringify(newGrid));
+          localStorage.setItem('128-grid', JSON.stringify(newGrid));
         }
 
         if (result.flat().includes(128)) {
           setGameOver(true);
-          localStorage.setItem('2048-game-over', JSON.stringify(true));
+          localStorage.setItem('128-game-over', JSON.stringify(true));
         }
       }
     },
@@ -139,10 +138,10 @@ const Game: React.FC = () => {
   );
 
   const handleReplay = () => {
-    setGrid(generateInitialGrid()); // 새로운 게임을 위한 초기 그리드 생성
-    setGameOver(false); // 게임 오버 상태 초기화
-    localStorage.removeItem('2048-grid'); // localStorage에서 그리드 삭제
-    localStorage.setItem('2048-game-over', JSON.stringify(false)); // localStorage에서 게임 오버 상태 초기화
+    setGrid(generateInitialGrid());
+    setGameOver(false);
+    localStorage.removeItem('128-grid');
+    localStorage.setItem('128-game-over', JSON.stringify(false));
   };
 
   useEffect(() => {
@@ -153,21 +152,32 @@ const Game: React.FC = () => {
   }, [handleKeyPress]);
 
   useEffect(() => {
-    localStorage.setItem('2048-grid', JSON.stringify(grid));
-    localStorage.setItem('2048-game-over', JSON.stringify(gameOver));
+    localStorage.setItem('128-grid', JSON.stringify(grid));
+    localStorage.setItem('128-game-over', JSON.stringify(gameOver));
   }, [grid, gameOver]);
 
   return (
     <div className="game-container">
-      <div className="title">128</div>
-      <div className="sub-title">Join the tiles, get to 128!</div>
+      <div className="header">
+        <div className="header-text">
+          <div className="title">128</div>
+          <div className="sub-container">
+            <div className="sub-title">
+              Join the tiles, get to <strong>128!</strong> <br />{' '}
+              <strong className="underline">How to play</strong> •{' '}
+              <strong className="underline">Give feedback</strong>
+            </div>
+
+            <button onClick={handleReplay} className="replay-button">
+              New Game
+            </button>
+          </div>
+        </div>
+      </div>
       <Board grid={grid} />
       {gameOver && (
         <div>
           <div className="game-over">Game Over!</div>
-          <div onClick={handleReplay} className="replay">
-            Wanna Replay?
-          </div>
         </div>
       )}
     </div>
