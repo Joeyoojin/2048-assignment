@@ -76,9 +76,7 @@ const moveLeft = (grid: Grid): { result: Grid; isMoved: boolean } => {
   return { result, isMoved };
 };
 
-const moveRowLeft = (
-  row: Cell[],
-): { result: Cell[]; isMoved: boolean } => {
+const moveRowLeft = (row: Cell[]): { result: Cell[]; isMoved: boolean } => {
   const reduced = row.reduce<{ lastCell: Cell; result: Cell[] }>(
     (acc, cell) => {
       if (cell === null) {
