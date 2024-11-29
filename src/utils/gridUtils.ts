@@ -1,8 +1,8 @@
 export type Cell = number | null;
 export type Grid = Cell[][];
-export type Position = { rowIndex: number; cellIndex: number };
+type Position = { rowIndex: number; cellIndex: number };
 
-export const getEmptyCells = (grid: Grid): Position[] => {
+const getEmptyCells = (grid: Grid): Position[] => {
   return grid
     .flatMap((row, rowIndex) =>
       row.map((cell, cellIndex): Position | null =>

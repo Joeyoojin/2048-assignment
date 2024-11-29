@@ -69,14 +69,14 @@ const rotateMapCounterClockwise = (grid: Grid, degree: number): Grid => {
   }
 };
 
-export const moveLeft = (grid: Grid): { result: Grid; isMoved: boolean } => {
+const moveLeft = (grid: Grid): { result: Grid; isMoved: boolean } => {
   const movedRows = grid.map(moveRowLeft);
   const result = movedRows.map((row) => row.result);
   const isMoved = movedRows.some((row) => row.isMoved);
   return { result, isMoved };
 };
 
-export const moveRowLeft = (
+const moveRowLeft = (
   row: Cell[],
 ): { result: Cell[]; isMoved: boolean } => {
   const reduced = row.reduce<{ lastCell: Cell; result: Cell[] }>(
