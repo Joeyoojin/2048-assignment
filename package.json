@@ -12,6 +12,7 @@
     "lint:check": "eslint .",
     "lint:fix": "eslint --fix .",
     "unused:check": "knip",
+    "test": "vitest",
     "check-all": "yarn types:check && yarn format:check && yarn lint:check && yarn unused:check"
   },
   "dependencies": {
@@ -28,7 +29,8 @@
     "knip": "5.30.2",
     "prettier": "3.3.3",
     "typescript": "5.6.2",
-    "vite": "5.4.5"
+    "vite": "5.4.5",
+    "vitest": "2.1.6"
   },
   "packageManager": "yarn@4.4.1"
 }
